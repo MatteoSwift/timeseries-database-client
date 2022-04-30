@@ -1,0 +1,12 @@
+/Users/Shared/源代码/私有/TSDB客户端/Salvini.TimeSeries.Client/bin/Debug/net6.0/Salvini.TimeSeries.Client.deps.json
+/Users/Shared/源代码/私有/TSDB客户端/Salvini.TimeSeries.Client/bin/Debug/net6.0/Salvini.TimeSeries.Client.dll
+/Users/Shared/源代码/私有/TSDB客户端/Salvini.TimeSeries.Client/bin/Debug/net6.0/ref/Salvini.TimeSeries.Client.dll
+/Users/Shared/源代码/私有/TSDB客户端/Salvini.TimeSeries.Client/bin/Debug/net6.0/Salvini.TimeSeries.Client.pdb
+/Users/Shared/源代码/私有/TSDB客户端/Salvini.TimeSeries.Client/obj/Debug/net6.0/Salvini.TimeSeries.Client.GeneratedMSBuildEditorConfig.editorconfig
+/Users/Shared/源代码/私有/TSDB客户端/Salvini.TimeSeries.Client/obj/Debug/net6.0/Salvini.TimeSeries.Client.AssemblyInfoInputs.cache
+/Users/Shared/源代码/私有/TSDB客户端/Salvini.TimeSeries.Client/obj/Debug/net6.0/Salvini.TimeSeries.Client.AssemblyInfo.cs
+/Users/Shared/源代码/私有/TSDB客户端/Salvini.TimeSeries.Client/obj/Debug/net6.0/Salvini.TimeSeries.Client.csproj.CoreCompileInputs.cache
+/Users/Shared/源代码/私有/TSDB客户端/Salvini.TimeSeries.Client/obj/Debug/net6.0/Salvini.TimeSeries.Client.dll
+/Users/Shared/源代码/私有/TSDB客户端/Salvini.TimeSeries.Client/obj/Debug/net6.0/ref/Salvini.TimeSeries.Client.dll
+/Users/Shared/源代码/私有/TSDB客户端/Salvini.TimeSeries.Client/obj/Debug/net6.0/Salvini.TimeSeries.Client.pdb
+/Users/Shared/源代码/私有/TSDB客户端/Salvini.TimeSeries.Client/obj/Debug/net6.0/Salvini.TimeSeries.Client.csproj.AssemblyReference.cache

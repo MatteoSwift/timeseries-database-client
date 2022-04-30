@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Salvini.TimeSeries.Client", "Salvini.TimeSeries.Client\Salvini.TimeSeries.Client.csproj", "{0F2279AE-C1EC-4EDA-B813-EC0B0343D934}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Salvini.TimeSeries.Web", "Salvini.TimeSeries.Web\Salvini.TimeSeries.Web.csproj", "{3FE869D8-E401-4206-BEC4-FAF96EFAC184}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F2279AE-C1EC-4EDA-B813-EC0B0343D934}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F2279AE-C1EC-4EDA-B813-EC0B0343D934}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F2279AE-C1EC-4EDA-B813-EC0B0343D934}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F2279AE-C1EC-4EDA-B813-EC0B0343D934}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FE869D8-E401-4206-BEC4-FAF96EFAC184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FE869D8-E401-4206-BEC4-FAF96EFAC184}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FE869D8-E401-4206-BEC4-FAF96EFAC184}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FE869D8-E401-4206-BEC4-FAF96EFAC184}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

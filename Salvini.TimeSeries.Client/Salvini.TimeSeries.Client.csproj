@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Version>1.1985.1110</Version>
+    <Authors>Salvini</Authors>
+    <Copyright>Salvini</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>1701;1702;IDE0039;IDE1006;IDE0063;CS8620;CS8600;CS1591;CS8604;CS8073;CS8603;CS1998;CS1570;CS0168</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
+    <PackageReference Include="Salvini.IoTDB" Version="1.13.760" />
+  </ItemGroup>
+
+</Project>
