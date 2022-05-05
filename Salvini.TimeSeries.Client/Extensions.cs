@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json.Nodes;
 
 namespace Salvini.TimeSeries;
@@ -154,6 +150,11 @@ public static partial class Extensions
 
 public static partial class Extensions
 {
+    /// <summary>
+    /// 保存测点数据
+    /// </summary> 
+    /// <param name="data">测点数据</param>
+    /// <param name="fileName">文件名</param>
     public static async Task SaveToCsvAsync(this (DateTime Start, DateTime End, string[] Tags, double[,] Matrix) data, string fileName)
     {
         var directory = Path.GetDirectoryName(fileName);

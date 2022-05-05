@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+﻿
 namespace Salvini.TimeSeries;
 
 /// <summary>
@@ -14,7 +10,7 @@ public abstract partial class Client
     {
         if (url.StartsWith("mongodb://")) return new MongoDBClient(url);
         if (url.StartsWith("iotdb://")) return new IoTDBClient(url);
-        throw new Exception("不受支持的连接字符串");
+        throw new Exception($"not support connection url=>{url}");
     }
     /// <summary>
     /// 测点不存在描述
@@ -214,39 +210,23 @@ public abstract partial class Client
     {
         var raw = await ArchiveAsync(device, tag, begin, end, digits);
         var ts = end - begin;
-        if (raw.Count > px * 2 && ts.Hours > 60)
+        if (raw.Count > px && ts.Hours > 6)
         {
-            var plot = new List<(DateTime Time, double Value)>();
-            var span = Math.Floor(ts.TotalSeconds / px);
-            Enumerable.Range(0, px).AsParallel().ForAll(i =>
-            {
-                var st = begin.AddSeconds(span * i);
-                var et = begin.AddSeconds(span * (i + 1));
-                var min = raw.Where(x => x.Time >= st && x.Time < et).OrderBy(x => (double)x.Value).FirstOrDefault();
-                var max = raw.Where(x => x.Time >= st && x.Time < et).OrderBy(x => (double)x.Value).LastOrDefault();
-                if (max.Time != DateTime.MinValue) plot.Add(max);
-                if (min.Time != DateTime.MinValue) plot.Add(min);
-            });
-
-            plot = plot.OrderBy(x => x.Time).ToList();
-            if (plot.Any() && (end - plot[^1].Time).TotalSeconds >= span)
-            {
-                plot.AddRange(raw.Where(x => x.Time > plot[^1].Time));
-            }
-            if (plot.Any() && plot[0].Time != begin)
-            {
-                plot.Insert(0, (begin, plot[0].Value));
-            }
-            if (plot.Any() && plot[^1].Time != end)
-            {
-                plot.Add((end, plot[^1].Value));
-            }
-
-            return plot.Where(x => x.Time > Extensions.UTC).ToList();
+            return ByPx();
         }
         else
         {
             return raw;
+        }
+
+        List<(DateTime Time, double Value)> ByPx()
+        {
+            var plot = new List<(DateTime Time, double Value)>();
+            var span = Math.Floor(ts.TotalSeconds / px);
+            Enumerable.Range(0, px).AsParallel().ForAll(i => plot.Add(raw.LastOrDefault(x => x.Time >= begin.AddSeconds(span))));
+            plot = plot.OrderBy(x => x.Time).Where(x => x.Time > Extensions.UTC).ToList();
+            if (plot.Any() && plot[plot.Count - 1].Time != end) plot.Add(raw[raw.Count - 1]);
+            return plot;
         }
     }
 
@@ -260,13 +240,10 @@ public abstract partial class Client
     /// <param name="end">结束时间</param>
     /// <param name="digits">数据精度,默认6位小数</param> 
     /// <param name="px">屏幕像素,默认1200</param>
-    public virtual async Task<Dictionary<string, List<(DateTime Time, double Value)>>> PlotAsync(string device, string[] tags, DateTime begin, DateTime end, int digits = 6, int px = 1200)
+    public virtual async Task<List<(string Tag, List<(DateTime Time, double Value)>)>> PlotAsync(string device, string[] tags, DateTime begin, DateTime end, int digits = 6, int px = 1200)
     {
-        var plot = new Dictionary<string, List<(DateTime Time, double Value)>>();
-        foreach (var tag in tags.Distinct().ToArray())
-        {
-            plot.Add(tag, await PlotAsync(device, tag, begin, end, digits, px));
-        }
+        var plot = new List<(string Tag, List<(DateTime Time, double Value)>)>();
+        foreach (var tag in tags) plot.Add((tag, await PlotAsync(device, tag, begin, end, digits, px)));
         return plot;
     }
 }

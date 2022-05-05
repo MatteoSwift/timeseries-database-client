@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
-    <PackageReference Include="Salvini.IoTDB" Version="1.13.760" />
+    <PackageReference Include="Salvini.IoTDB" Version="1.13.760.1" />
   </ItemGroup>
 
 </Project>
