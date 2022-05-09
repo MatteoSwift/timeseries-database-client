@@ -21,14 +21,14 @@ echo '
   },
   "Eureka": {
     "Client": {
-      "EurekaServerServiceUrls": "http://10.10.0.5:8761/eureka/",
+      "EurekaServerServiceUrls": "http://10.10.5.5:8761/eureka/",
       "ShouldRegisterWithEureka": true,
       "ShouldFetchRegistry": true,
       "ValidateCertificates": false,
       "RegistryFetchIntervalSeconds": 10
     },
     "Instance": {
-      "InstanceId": "10.10.188.10:18810", 
+      "InstanceId": "10.10.11.11:11011", 
       "PreferIpAddress": true,
       "LeaseRenewalIntervalInSeconds": 5,
       "LeaseExpirationDurationInSeconds": 15

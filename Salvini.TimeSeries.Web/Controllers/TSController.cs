@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Salvini.TimeSeries;
 
 [ApiController]
-[Route("ts/[action]")]
+[Route("timeseries/[action]")]
 public class TSController : ControllerBase
 {
     private Client _client;
