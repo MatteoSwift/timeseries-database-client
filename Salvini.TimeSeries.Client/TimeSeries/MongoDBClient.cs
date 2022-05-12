@@ -7,7 +7,7 @@ using MongoDB.Driver;
 
 namespace Salvini.TimeSeries;
 
-public class MongoDBClient : Salvini.TimeSeries.Client
+public class MongoDBClient : Salvini.TimeSeriesClient
 {
     private const string CN_POINT = "point";
     private const string CN_SNAPSHOT = "snapshot";
@@ -118,7 +118,6 @@ public class MongoDBClient : Salvini.TimeSeries.Client
             }
         }
     }
-
 
     public override async Task<List<(string Tag, DateTime Time, double Value)>> SnapshotAsync(string device, List<string> tags)
     {

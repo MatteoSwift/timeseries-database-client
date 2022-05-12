@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Http.Features;
-using Salvini.TimeSeries;
+using Salvini;
 using Steeltoe.Discovery.Client;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +14,7 @@ services.AddHttpClient();
 services.AddControllers();
 services.AddDirectoryBrowser();
 services.AddCors(options => options.AddPolicy("cors", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
-services.AddSingleton(Client.Create(args.FirstOrDefault(x => x.StartsWith("--cn="))?[5..] ?? ""));
+services.AddSingleton(TimeSeriesClient.Create(args.FirstOrDefault(x => x.StartsWith("--cn="))?[5..] ?? ""));
 
 var app = builder.Build();
 

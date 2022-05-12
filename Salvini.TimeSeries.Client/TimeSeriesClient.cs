@@ -1,12 +1,14 @@
 ﻿
-namespace Salvini.TimeSeries;
+using Salvini.TimeSeries;
+
+namespace Salvini;
 
 /// <summary>
-/// 数据库客户端驱动接口
+/// 时序数据库客户端驱动接口
 /// </summary>
-public abstract partial class Client
+public abstract partial class TimeSeriesClient
 {
-    public static Client Create(string url)
+    public static TimeSeriesClient Create(string url)
     {
         if (url.StartsWith("mongodb://")) return new MongoDBClient(url);
         if (url.StartsWith("iotdb://")) return new IoTDBClient(url);
@@ -21,7 +23,7 @@ public abstract partial class Client
 
     public string Url { get; }
 
-    protected Client(string url)
+    protected TimeSeriesClient(string url)
     {
         this.Url = url;
     }
@@ -177,6 +179,7 @@ public abstract partial class Client
         var hist = (await HistoryAsync(device, tag, begin, end, digits));
         return (begin, end, tag, hist.Select(x => x.Value).ToArray());
     }
+
     public virtual async Task<(DateTime Start, DateTime End, string[] Tags, double[,] Matrix)> HistoryxAsync(string device, List<string> tags, DateTime begin, DateTime end, int digits = 6, int ms = 1000)
     {
         var hist = new List<double[]>();
@@ -222,10 +225,23 @@ public abstract partial class Client
         List<(DateTime Time, double Value)> ByPx()
         {
             var plot = new List<(DateTime Time, double Value)>();
-            var span = Math.Floor(ts.TotalSeconds / px);
-            Enumerable.Range(0, px).AsParallel().ForAll(i => plot.Add(raw.LastOrDefault(x => x.Time >= begin.AddSeconds(span))));
-            plot = plot.OrderBy(x => x.Time).Where(x => x.Time > Extensions.UTC).ToList();
-            if (plot.Any() && plot[plot.Count - 1].Time != end) plot.Add(raw[raw.Count - 1]);
+            if (raw.Any())
+            {
+                var span = Math.Floor(ts.TotalSeconds / px);
+                Enumerable.Range(1, px).AsParallel().ForAll(i =>
+                {
+                    var items = raw.Where(x => x.Time > begin && x.Time <= begin.AddSeconds(i * span)).ToList();
+                    var min = items.OrderBy(x => x.Value).FirstOrDefault();
+                    var max = items.OrderByDescending(x => x.Value).FirstOrDefault();
+                    var lst = items.LastOrDefault();
+                    plot.Add(lst);
+                    if (max != lst) plot.Add(max);
+                    if (min != lst) plot.Add(min);
+                });
+                plot = plot.OrderBy(x => x.Time).Where(x => x.Time > Extensions.UTC).ToList();
+                if (plot[plot.Count - 1].Time != end) plot.Add(raw[raw.Count - 1]);
+                if (plot[0] != raw[0]) plot.Insert(0, raw[0]);
+            }
             return plot;
         }
     }

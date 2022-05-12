@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>1.1985.1110</Version>
+    <Version>1.760.512.0</Version>
     <Authors>Salvini</Authors>
     <Copyright>Salvini</Copyright>
   </PropertyGroup>

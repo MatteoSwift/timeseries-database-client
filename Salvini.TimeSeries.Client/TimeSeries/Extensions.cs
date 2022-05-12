@@ -4,7 +4,7 @@ using System.Text.Json.Nodes;
 namespace Salvini.TimeSeries;
 
 /// <summary>
-/// NoSQL辅助函数
+/// 辅助函数
 /// </summary>
 public static partial class Extensions
 {

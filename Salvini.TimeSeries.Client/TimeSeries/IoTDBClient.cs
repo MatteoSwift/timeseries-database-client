@@ -9,7 +9,7 @@ using Salvini.IoTDB.Data;
 
 namespace Salvini.TimeSeries;
 
-public class IoTDBClient : Salvini.TimeSeries.Client
+public class IoTDBClient : Salvini.TimeSeriesClient
 {
     private readonly Session session;
 

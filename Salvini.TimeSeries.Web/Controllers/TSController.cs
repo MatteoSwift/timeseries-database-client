@@ -15,8 +15,8 @@ namespace Salvini.TimeSeries;
 [Route("timeseries/[action]")]
 public class TSController : ControllerBase
 {
-    private Client _client;
-    public TSController(Client client)
+    private TimeSeriesClient _client;
+    public TSController(TimeSeriesClient client)
     {
         _client = client;
     }
