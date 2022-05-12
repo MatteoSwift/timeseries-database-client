@@ -213,7 +213,7 @@ public abstract partial class TimeSeriesClient
     {
         var raw = await ArchiveAsync(device, tag, begin, end, digits);
         var ts = end - begin;
-        if (raw.Count > px && ts.Hours > 6)
+        if (raw.Count > px && ts.TotalHours > 1)
         {
             return ByPx();
         }
@@ -230,15 +230,15 @@ public abstract partial class TimeSeriesClient
                 var span = Math.Floor(ts.TotalSeconds / px);
                 Enumerable.Range(1, px).AsParallel().ForAll(i =>
                 {
-                    var items = raw.Where(x => x.Time > begin && x.Time <= begin.AddSeconds(i * span)).ToList();
+                    var items = raw.Where(x => x.Time > begin.AddSeconds((i - 1) * span) && x.Time <= begin.AddSeconds(i * span)).ToList();
                     var min = items.OrderBy(x => x.Value).FirstOrDefault();
                     var max = items.OrderByDescending(x => x.Value).FirstOrDefault();
                     var lst = items.LastOrDefault();
-                    plot.Add(lst);
-                    if (max != lst) plot.Add(max);
-                    if (min != lst) plot.Add(min);
+                    if (lst.Time != DateTime.MinValue) plot.Add(lst);
+                    if (max != lst && max.Time != DateTime.MinValue) plot.Add(max);
+                    if (min != lst && min.Time != DateTime.MinValue) plot.Add(min);
                 });
-                plot = plot.OrderBy(x => x.Time).Where(x => x.Time > Extensions.UTC).ToList();
+                plot = plot.OrderBy(x => x.Time).ToList();
                 if (plot[plot.Count - 1].Time != end) plot.Add(raw[raw.Count - 1]);
                 if (plot[0] != raw[0]) plot.Insert(0, raw[0]);
             }
