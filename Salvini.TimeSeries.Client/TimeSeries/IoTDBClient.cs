@@ -104,7 +104,7 @@ public class IoTDBClient : Salvini.TimeSeriesClient
             {
                 var values = cols.Select((j) => matrix[1, j]).ToList();
                 var record = new RowRecord(UTC_MS(matrix[1, 0]), values, measurements);
-                var effect = await session.InsertRecordAsync($"root.{device}", record);
+                var effect = await session.InsertRecordAsync($"root.{device}", record, false);
             }
             else
             {
@@ -116,7 +116,7 @@ public class IoTDBClient : Salvini.TimeSeriesClient
                     values.Add(cols.Select(j => matrix[i, j]).ToList());
                 }
                 var tablet = new Tablet($"root.{device}", measurements, values, timestamps);
-                var effect = await session.InsertTabletAsync(tablet);
+                var effect = await session.InsertTabletAsync(tablet, false);
             }
         }
     }

@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Steeltoe.Discovery.Client;
 using Salvini;
 
-var client = TimeSeriesClient.Create(args.FirstOrDefault(x => x.StartsWith("--cn="))?[5..] ?? "iotdb://root:admin#123@172.168.0.1:6667/appName=KylinAGC");
-
+var client = TimeSeriesClient.Create(args.FirstOrDefault(x => x.StartsWith("--cn="))?[5..] ?? "iotdb://root:admin#123@127.0.0.1:6667/appName=KylinAGC");
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
