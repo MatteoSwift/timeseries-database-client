@@ -195,7 +195,7 @@ public class IoTDBClient : Salvini.TimeSeriesClient
             if (!reg.IsMatch(id)) continue;
             var tags = DeserializeObject((string)values[^2]);
             var attributes = DeserializeObject((string)values[^1]);
-            points.Add((id, (string)tags?["t"], (string)tags?["d"], (string)tags?["u"], (double?)attributes?["l"], (double?)attributes?["h"], (DateTime?)tags?["@t"]));
+            points.Add((id, (string)tags?["t"], (string)tags?["d"], (string)tags?["u"], double.TryParse((string)attributes?["l"], out var l) ? l : default(double?), double.TryParse((string)attributes?["h"], out var h) ? h : default(double?), DateTime.TryParse((string)tags?["@t"], out var modify) ? modify : default(DateTime?)));
         }
         return points.OrderBy(x => x.Tag).ToList();
     }

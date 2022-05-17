@@ -24,6 +24,10 @@
 
   <ItemGroup>
     <None Remove=".gitignore" />
+    <Compile Remove="Helpers\**" />
+    <Content Remove="Helpers\**" />
+    <EmbeddedResource Remove="Helpers\**" />
+    <None Remove="Helpers\**" />
     <None Remove="Properties\**" />
   </ItemGroup>
 
@@ -49,8 +53,5 @@
     <ProjectReference Include="..\Salvini.TimeSeries.Client\Salvini.TimeSeries.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>
