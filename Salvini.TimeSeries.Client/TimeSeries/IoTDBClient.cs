@@ -15,18 +15,17 @@ public class IoTDBClient : Salvini.TimeSeriesClient
 
     public IoTDBClient(string url) : base(url)
     {
-        //url = iotdb://root:admin#123@127.0.0.1:6667/?appName=iTSDB
+        //url = iotdb://root:admin#123@127.0.0.1:6667/?appName=iTSDB&fetchSize=1800
         var match_host = new Regex(@"@((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}:").Match(url);
         var match_port = new Regex(@":(\d{1,5})/?").Match(url);
         var match_user = new Regex(@"iotdb://(\w+):").Match(url);
         var match_pwd = new Regex(@":(\w+\S+){1}(@)").Match(url);
-        var match_fetchsize = new Regex(@"fetchSize=(\d+){1}", RegexOptions.IgnoreCase).Match(url);
 
         var host = match_host.Success ? match_host.Value[1..^1] : "127.0.0.1";
-        var port = match_port.Success ? int.Parse(match_port.Value[1..^1]) : 6667;
+        var port = match_port.Success ? int.Parse(match_port.Value[1..].Replace("/", string.Empty)) : 6667;
         var username = match_user.Success ? match_user.Value[8..^1] : "root";
         var password = match_pwd.Success ? match_pwd.Value[1..^1] : "root";
-        var fetchSize = match_fetchsize.Success ? int.Parse(match_fetchsize.Value[10..]) : 1800;
+        var fetchSize = 1800;
 
         session = new Session(host, port, username, password, fetchSize);
         session.OpenAsync().Wait(TimeSpan.FromSeconds(5));
@@ -139,7 +138,7 @@ public class IoTDBClient : Salvini.TimeSeriesClient
             }
             if (point.Downlimit != null && point.Uplimit != null)
             {
-                sql += $" attributes (d='{point.Downlimit}',u='{point.Uplimit}')";
+                sql += $" attributes (l='{point.Downlimit}',h='{point.Uplimit}')";
             }
             var effect = await session.ExecuteNonQueryStatementAsync(sql);
             Console.WriteLine($"iotdb:InitializeAsync:{effect}>>{sql}");
@@ -196,7 +195,7 @@ public class IoTDBClient : Salvini.TimeSeriesClient
             if (!reg.IsMatch(id)) continue;
             var tags = DeserializeObject((string)values[^2]);
             var attributes = DeserializeObject((string)values[^1]);
-            points.Add((id, (string)tags?["t"], (string)tags?["d"], (string)tags?["u"], (double?)attributes?["d"], (double?)attributes?["u"], (DateTime?)tags?["@t"]));
+            points.Add((id, (string)tags?["t"], (string)tags?["d"], (string)tags?["u"], (double?)attributes?["l"], (double?)attributes?["h"], (DateTime?)tags?["@t"]));
         }
         return points.OrderBy(x => x.Tag).ToList();
     }
