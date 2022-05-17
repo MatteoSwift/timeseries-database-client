@@ -11,6 +11,8 @@
 
   <PropertyGroup>
     <NoWarn>1701;1702;IDE0039;IDE1006;IDE0063;CS8620;CS8600;CS1591;CS8604;CS8073;CS8603;CS1998;CS1570;CS0168</NoWarn>
+    <Description>时序数据库访问封装，支持MongoDB和Apache/IoTDB</Description>
+    <PackageProjectUrl>https://github.com/MatteoSwift/timeseries-database-client</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
