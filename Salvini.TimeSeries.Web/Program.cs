@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var services = builder.Services;
-//services.Configure<WebEncoderOptions>(options => options.TextEncoderSettings = new TextEncoderSettings());
 services.Configure<FormOptions>(x => { x.ValueLengthLimit = int.MaxValue; x.MultipartBodyLengthLimit = long.MaxValue; });
 if (args.Any(x => x == "--eureka")) services.AddDiscoveryClient();
 services.AddMemoryCache();
