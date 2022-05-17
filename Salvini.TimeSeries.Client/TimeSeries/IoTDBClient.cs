@@ -95,14 +95,13 @@ public class IoTDBClient : Salvini.TimeSeriesClient
 
     public override async Task BulkWriteAsync(string device, dynamic[,] matrix)
     {
-        var rank = matrix.Rank;
-        var size = matrix.Length / rank;
-
-        if (size != 0)
+        var rows = matrix.GetUpperBound(0) + 1;
+        var columns = matrix.GetUpperBound(1) + 1;
+        if (rows != 0)
         {
-            var cols = Enumerable.Range(1, rank).ToList();
+            var cols = Enumerable.Range(1, columns - 1).ToList();
             var measurements = cols.Select((j) => ((string)matrix[0, j]).Replace("root.", string.Empty)).ToList();
-            if (size == 2)
+            if (rows == 2)
             {
                 var values = cols.Select((j) => matrix[1, j]).ToList();
                 var record = new RowRecord(UTC_MS(matrix[1, 0]), values, measurements);
@@ -112,9 +111,9 @@ public class IoTDBClient : Salvini.TimeSeriesClient
             {
                 var timestamps = new List<DateTime>();
                 var values = new List<List<dynamic>>();
-                for (var i = 0; i < size; i++)
+                for (var i = 1; i < rows; i++)
                 {
-                    timestamps.Add(matrix[i + 1, 0]);
+                    timestamps.Add(matrix[i, 0]);
                     values.Add(cols.Select(j => matrix[i, j]).ToList());
                 }
                 var tablet = new Tablet($"root.{device}", measurements, values, timestamps);

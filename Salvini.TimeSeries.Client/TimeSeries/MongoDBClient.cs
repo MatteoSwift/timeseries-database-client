@@ -39,14 +39,14 @@ public class MongoDBClient : Salvini.TimeSeriesClient
 
     public override async Task BulkWriteAsync(string device, dynamic[,] matrix)
     {
-        var rank = matrix.Rank;
-        var size = matrix.Length / rank;
+        var rows = matrix.GetUpperBound(0) + 1;
+        var columns = matrix.GetUpperBound(1) + 1;
 
-        if (size != 0)
+        if (rows != 0)
         {
-            var cols = Enumerable.Range(1, rank).ToList();
+            var cols = Enumerable.Range(1, columns-1).ToList();
             var measurements = cols.Select((j) => ((string)matrix[0, j]).Replace("root.", string.Empty)).ToList();
-            if (size == 2)
+            if (rows == 2)
             {
                 var time = (DateTime)matrix[1, 0];
                 var hh = $"{time:HH}";
@@ -91,7 +91,7 @@ public class MongoDBClient : Salvini.TimeSeriesClient
                     var _id = measurements[j];
                     var time = (DateTime)matrix[1, 0];
                     (var bson, var findarchive) = await ReadOne(_id, time);
-                    for (int i = 1; i < size; i++)
+                    for (int i = 1; i < rows; i++)
                     {
                         if (((DateTime)matrix[i, 0]).Date != time.Date)
                         {
@@ -105,12 +105,12 @@ public class MongoDBClient : Salvini.TimeSeriesClient
                         if (!bson.Contains(hh)) bson[hh] = new BsonDocument();
                         if (!((BsonDocument)bson[hh]).Contains(mm)) bson[hh][mm] = new BsonDocument();
                         if (!((BsonDocument)bson[hh][mm]).Contains(ss)) ((BsonDocument)bson[hh][mm]).Add(ss, matrix[i, j + 1]);
-                        else bson[hh][mm][ss] = matrix[i, j + 1];
+                        else bson[hh][mm][ss] = matrix[i, j+1];
                     }
                     await client.GetDatabase(device).GetCollection<BsonDocument>(CN_ARCHIVE).ReplaceOneAsync(findarchive, bson, new ReplaceOptions { IsUpsert = true });
 
                     var ts = $"{time:yyyy-MM-dd HH:mm:ss}";
-                    var value = matrix[size - 1, j + 1];
+                    var value = matrix[rows - 1, j + 1];
                     var upsnapshot = new UpdateDefinitionBuilder<BsonDocument>().Set("_id", _id).Set("time", ts).Set("value", (object)value);
                     var findsnapshot = new FilterDefinitionBuilder<BsonDocument>().Eq("_id", _id);
                     await client.GetDatabase(device).GetCollection<BsonDocument>(CN_SNAPSHOT).UpdateOneAsync(findsnapshot, upsnapshot, new UpdateOptions { IsUpsert = true });

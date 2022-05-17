@@ -2,6 +2,11 @@ using Microsoft.AspNetCore.Http.Features;
 using Salvini;
 using Steeltoe.Discovery.Client;
 
+var client = TimeSeriesClient.Create(args.FirstOrDefault(x => x.StartsWith("--cn="))?[5..] ?? "");
+
+//client.BulkWriteAsync("kylin", DateTime.Today, new List<(string, double)> { ("TEST1", 2.2), ("TEST2", 2.2), ("TEST3", 2.2) }).Wait();
+client.BulkWriteAsync("kylin", "TEST", new List<(DateTime Time, double Value)>{(DateTime.MinValue,1.2),(DateTime.MaxValue,123.1)}).Wait();
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,7 +19,7 @@ services.AddHttpClient();
 services.AddControllers();
 services.AddDirectoryBrowser();
 services.AddCors(options => options.AddPolicy("cors", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
-services.AddSingleton(TimeSeriesClient.Create(args.FirstOrDefault(x => x.StartsWith("--cn="))?[5..] ?? ""));
+services.AddSingleton(client);
 
 var app = builder.Build();
 
